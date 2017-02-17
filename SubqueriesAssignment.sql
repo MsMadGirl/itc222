@@ -26,14 +26,13 @@ WHERE e.EmployeeKey in
 	--Columns in BusScheduleAssignment: BusScheduleAssignmentKey, BusDriverShift, EmployeeKey, BusScheduleAssignmentDate, BusKey
     --aggregatefunctions.png Year, Annual Total, Annual Average, Total, Percent
     --The Total  is the grand total for all the years. The Percent is Annual Total / Grand Total * 100
-SELECT DatePart(Year,bsa.BusScheduleAssignmentDate) AS Year, (SUM(r.Riders) GROUP BY DatePart(Year,bsa.BusScheduleAssignmentDate)) AS Annual Total,
-AVG(r.Riders) as Annual Average, SUM(r.Riders) as Total, CAST((SUM(r.Riders) GROUP BY DatePart(Year,bsa.BusScheduleAssignmentDate) / SUM(r.Riders) * 100) AS real) AS Percent
+SELECT Year(BusScheduleAssignmentDate) AS [Year], SUM(Riders)  AS [Annual Total],
+AVG(Riders) as [Annual Average], (SELECT SUM(Riders) FROM Ridership) as Total, CAST(SUM(Riders) as decimal(10,2)) / (SELECT SUM(Riders) FROM Ridership) * 100  AS [Percent]
 	FROM BusScheduleAssignment bsa 
 	INNER JOIN Ridership r
-		ON r.Riders
-			WHERE r.BusScheduleAssignmentKey = bsa.BusScheduleAssignmentKey 
-			WHERE (SELECT DatePart(Year,bsa.BusScheduleAssignmentDate) 
-			FROM BusScheduleAssignment bsa);
+		ON r.[BusScheduleAssigmentKey] = bsa.[BusScheduleAssignmentKey]
+	 GROUP BY Year(BusScheduleAssignmentDate)
+
 
     --Create a new table called EmployeeZ. It should have the following structure:
     --EmployeeKey int,
