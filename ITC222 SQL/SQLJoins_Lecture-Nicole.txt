@@ -1,0 +1,95 @@
+--Lectue on joins
+--read up on cases from book
+
+--Joins
+--Cross joins
+--innner joins
+--outer joins - full join
+
+
+--Cross Join or Cartesian Join. Maching every single value to every other value:
+USE Community_Assist
+SELECT
+PersonLastName, DonationAmount
+From Person, Donation
+;
+
+SELECT
+PersonLastName, DonationAmount
+From person
+Cross Join Donation
+;
+
+--inner join old syntax -
+
+SELECT PersonLastName, PersonEmail,ContactNumber, DonationAmount
+FROM Person, Contact, Donation
+WHERE Person.PersonKey=Contact.PersonKey
+And Person.Personkey = Donation.Personkey
+And ContactTypeKey=1
+;
+
+--preffered syntax for inner joins. Safer You will use this 90 percent of the time
+
+SELECT PersonLastName, PersonEmail,ContactNumber, DonationAmount
+FROM Person
+inner join Contact
+on Person.Personkey = Contact.Personkey
+inner join Donation
+on Person.Personkey=Donation.Personkey
+where ContactTypekey=1
+;
+
+--inner join using alias
+
+SELECT p.PersonKey, PersonLastName, PersonEmail,ContactNumber, DonationAmount
+FROM Person p --alias
+inner join Contact c
+on P.Personkey = c.Personkey
+inner join Donation d
+on p.Personkey=d.Personkey
+where ContactTypekey=1
+;
+
+--another inner join
+
+SELECT * FROM GrantReview
+
+SELECT Year(GrantRequestDate) [Year], GrantTypeName, Sum(GrantRequestAmount) as Request,
+Sum(GrantAllocationAmount) as Granted, Sum(GrantAllocationAmount)/Sum (GrantRequestAmount) * 100 as Percentage
+FROM
+GrantRequest gr
+inner join GrantType gt
+on gr.GrantTypeKey = gt.GrantTypeKey
+inner join GrantReview gv
+on gv.GrantRequestkey = gr.GrantRequestkey
+GROUP BY Year(GrantRequestDate), GrantTypeName
+ORDER BY Year(GrantRequestDate)
+;
+
+
+--outer joins returns all the record on one side and only matching records on the other side
+
+SELECT GrantTypeName, GrantRequest.GrantTypeKey
+FROM GrantType
+Left outer join GrantRequest
+on GrantType.GrantTypeKey = GrantRequest.GrantRequestkey
+WHERE GrantRequest.GrantRequestkey is null
+;
+
+--another outer join
+SELECT ContactTypeName, Contact.ContactTypeKey
+FROM ContactType
+left outer Join Contact
+on ContactType.ContactTypekey = Contact.ContactTypeKey
+WHERE Contact.ContactTypeKey is null
+;
+
+
+--full join returns everything from both tables weather they match or not. A little harder to get your head around
+
+SELECT Distinct ContactTypeName, Contact.ContactTypeKey
+FROM ContactType
+full Join Contact
+on ContactType.ContactTypekey = Contact.ContactTypeKey
+;

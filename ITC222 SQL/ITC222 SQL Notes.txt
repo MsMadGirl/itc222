@@ -1,0 +1,7 @@
+ITC222 SQL Notes
+
+CourseCredits int default 5 not null, /**default sets the value of the field to 5**/
+
+
+1/12/17
+

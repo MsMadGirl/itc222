@@ -1,0 +1,75 @@
+ Joins
+
+--Joins
+--cross joins
+--inner joins
+-- outer joins  -full join
+
+Use Community_Assist
+Select PersonLastName, DonationAmount
+From Person, Donation
+
+Select PersonLastName, DonationAmount
+From Person 
+Cross Join Donation
+
+Select PersonLastName, PersonEmail, ContactNumber, DonationAmount
+From Person, Contact, Donation
+Where Person.PersonKey=Contact.PersonKey
+And Person.PersonKey = Donation.PersonKey
+And ContactTypeKey=1
+
+Select PersonLastName, PersonEmail, ContactNumber, DonationAmount
+From Person
+inner join Contact
+on Person.PersonKey=contact.PersonKey
+inner join Donation
+on Person.PersonKey=Donation.PersonKey
+where ContactTypeKey=1;
+
+Select p.personKey,PersonLastName, PersonEmail, ContactNumber, DonationAmount
+From Person p
+inner join Contact c
+on p.PersonKey=c.PersonKey
+inner join Donation d
+on p.PersonKey=d.PersonKey
+where ContactTypeKey=1;
+
+Select * from GrantReview
+
+Select Year(GrantRequestDate) [Year], GrantTypeName, Sum(GrantRequestAmount) as Request, 
+Sum(GrantAllocationAmount) as Granted, format(Sum(GrantAllocationAmount)/sum(GrantRequestAmount), '###.00 %') as Percentage
+From GrantRequest gr
+inner join GrantType gt
+on gr.GrantTypeKey=gt.GrantTypeKey
+inner join GrantReview gv
+on gv.GrantRequestKey=gr.GrantRequestKey
+Group by Year(GrantRequestDate), GrantTypeName
+Order by Year(GrantRequestDate)
+
+--outer
+Select GrantTypeName, GrantRequest.GrantTypeKey
+From GrantType
+Left outer join GrantRequest
+on GrantType.GrantTypeKey =GrantRequest.GrantRequestKey
+Where GrantRequest.GrantTypeKey is null
+
+Select ContactTypeName, Contact.ContactTypeKey
+From ContactType
+left outer Join Contact
+on ContactType.ContactTypeKey=contact.ContactTypeKey
+Where Contact.ContactTypeKey is null
+
+Select ContactTypeName, Contact.ContactTypeKey
+From Contact
+right outer Join ContactType
+on ContactType.ContactTypeKey=contact.ContactTypeKey
+Where Contact.ContactTypeKey is null
+
+Select Distinct ContactTypeName, Contact.ContactTypeKey
+From ContactType
+Full Join Contact
+on ContactType.ContactTypeKey=contact.ContactTypeKey
+
+
+

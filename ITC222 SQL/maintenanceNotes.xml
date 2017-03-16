@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<maintenanceNotes xlmns="http://www.metroalt.com/maintenanceNotes">
+
+  <comments>
+    <comment>The brakes will need replacing in a few months.</comment>
+    <comment>The tires are about shot.</comment>
+  
+  </comments>
+
+  <actions>
+    <action>Schedule brake replacement.</action>
+    <action>New tires in six months.</action>
+  </actions>
+
+</maintenanceNotes>
